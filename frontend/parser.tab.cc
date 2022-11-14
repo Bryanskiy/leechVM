@@ -668,8 +668,20 @@ namespace yy {
 #line 669 "parser.tab.cc"
     break;
 
+  case 5: // line: OPCODE I32
+#line 27 "parser.y"
+                            {}
+#line 675 "parser.tab.cc"
+    break;
 
-#line 673 "parser.tab.cc"
+  case 6: // line: OPCODE I32 I32
+#line 28 "parser.y"
+                            {}
+#line 681 "parser.tab.cc"
+    break;
+
+
+#line 685 "parser.tab.cc"
 
             default:
               break;
@@ -909,19 +921,19 @@ namespace yy {
   const signed char
   parser::yypact_[] =
   {
-      -4,    -5,     1,    -4,    -5,    -5
+      -4,    -2,     2,    -4,     0,    -5,    -5,    -5
   };
 
   const signed char
   parser::yydefact_[] =
   {
-       3,     4,     0,     3,     1,     2
+       3,     4,     0,     3,     5,     1,     2,     6
   };
 
   const signed char
   parser::yypgoto_[] =
   {
-      -5,    -1,    -5
+      -5,     1,    -5
   };
 
   const signed char
@@ -933,31 +945,31 @@ namespace yy {
   const signed char
   parser::yytable_[] =
   {
-       1,     4,     5
+       1,     4,     5,     7,     6
   };
 
   const signed char
   parser::yycheck_[] =
   {
-       4,     0,     3
+       4,     3,     0,     3,     3
   };
 
   const signed char
   parser::yystos_[] =
   {
-       0,     4,     6,     7,     0,     6
+       0,     4,     6,     7,     3,     0,     6,     3
   };
 
   const signed char
   parser::yyr1_[] =
   {
-       0,     5,     6,     6,     7
+       0,     5,     6,     6,     7,     7,     7
   };
 
   const signed char
   parser::yyr2_[] =
   {
-       0,     2,     2,     0,     1
+       0,     2,     2,     0,     1,     2,     3
   };
 
 
@@ -967,7 +979,7 @@ namespace yy {
   const signed char
   parser::yyrline_[] =
   {
-       0,    23,    23,    24,    26
+       0,    23,    23,    24,    26,    27,    28
   };
 
   void
@@ -1045,9 +1057,9 @@ namespace yy {
   }
 
 } // yy
-#line 1049 "parser.tab.cc"
+#line 1061 "parser.tab.cc"
 
-#line 27 "parser.y"
+#line 29 "parser.y"
 
 
 namespace yy {
@@ -1056,9 +1068,9 @@ namespace yy {
 	}
 
     void parser::error (const std::string& msg) {
+        std::cout << msg << std::endl;
 	}
 
 	void parser::report_syntax_error(parser::context const& ctx) const {
-		
 	}
 }

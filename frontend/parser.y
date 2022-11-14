@@ -24,6 +24,8 @@ program:  line program      {}
         | /* empty */ 	    {}
 
 line:     OPCODE            {}
+        | OPCODE I32        {}
+        | OPCODE I32 I32    {}
 %%
 
 namespace yy {
@@ -32,9 +34,9 @@ namespace yy {
 	}
 
     void parser::error (const std::string& msg) {
+        std::cout << msg << std::endl;
 	}
 
 	void parser::report_syntax_error(parser::context const& ctx) const {
-		
 	}
 }

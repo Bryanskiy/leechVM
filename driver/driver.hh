@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <unordered_map>
 
 #ifndef yyFlexLexer
 #include <FlexLexer.h>
@@ -12,7 +13,7 @@ namespace yy {
 
 class Driver {
 public:
-    Driver() = default;
+    Driver();
     Driver(const Driver&) = delete;
     Driver(Driver&&) = delete;
     
@@ -25,5 +26,6 @@ public:
     yy::parser::token_type yylex(yy::parser::semantic_type* yylval);
 private:
     std::unique_ptr<yyFlexLexer> lexer = nullptr;
+    std::unordered_map<std::string, uint32_t> opcodes;
 };
 } // namespace yy
