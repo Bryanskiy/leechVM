@@ -383,8 +383,11 @@ namespace yy {
       // I32
       char dummy1[sizeof (int32_t)];
 
+      // STR
+      char dummy2[sizeof (std::string)];
+
       // OPCODE
-      char dummy2[sizeof (uint32_t)];
+      char dummy3[sizeof (uint32_t)];
     };
 
     /// The size of the largest semantic type.
@@ -429,7 +432,13 @@ namespace yy {
     YYerror = 256,                 // error
     YYUNDEF = 257,                 // "invalid token"
     I32 = 258,                     // I32
-    OPCODE = 259                   // OPCODE
+    OPCODE = 259,                  // OPCODE
+    STR = 260,                     // STR
+    CONSTANTS = 261,               // CONSTANTS
+    NAMES = 262,                   // NAMES
+    VARIABLES = 263,               // VARIABLES
+    BYTECODE = 264,                // BYTECODE
+    COLON = 265                    // COLON
       };
       /// Backward compatibility alias (Bison 3.6).
       typedef token_kind_type yytokentype;
@@ -446,16 +455,22 @@ namespace yy {
     {
       enum symbol_kind_type
       {
-        YYNTOKENS = 5, ///< Number of tokens.
+        YYNTOKENS = 11, ///< Number of tokens.
         S_YYEMPTY = -2,
         S_YYEOF = 0,                             // "end of file"
         S_YYerror = 1,                           // error
         S_YYUNDEF = 2,                           // "invalid token"
         S_I32 = 3,                               // I32
         S_OPCODE = 4,                            // OPCODE
-        S_YYACCEPT = 5,                          // $accept
-        S_program = 6,                           // program
-        S_line = 7                               // line
+        S_STR = 5,                               // STR
+        S_CONSTANTS = 6,                         // CONSTANTS
+        S_NAMES = 7,                             // NAMES
+        S_VARIABLES = 8,                         // VARIABLES
+        S_BYTECODE = 9,                          // BYTECODE
+        S_COLON = 10,                            // COLON
+        S_YYACCEPT = 11,                         // $accept
+        S_program = 12,                          // program
+        S_line = 13                              // line
       };
     };
 
@@ -494,6 +509,10 @@ namespace yy {
         value.move< int32_t > (std::move (that.value));
         break;
 
+      case symbol_kind::S_STR: // STR
+        value.move< std::string > (std::move (that.value));
+        break;
+
       case symbol_kind::S_OPCODE: // OPCODE
         value.move< uint32_t > (std::move (that.value));
         break;
@@ -526,6 +545,18 @@ namespace yy {
       {}
 #else
       basic_symbol (typename Base::kind_type t, const int32_t& v)
+        : Base (t)
+        , value (v)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, std::string&& v)
+        : Base (t)
+        , value (std::move (v))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const std::string& v)
         : Base (t)
         , value (v)
       {}
@@ -569,6 +600,10 @@ switch (yykind)
     {
       case symbol_kind::S_I32: // I32
         value.template destroy< int32_t > ();
+        break;
+
+      case symbol_kind::S_STR: // STR
+        value.template destroy< std::string > ();
         break;
 
       case symbol_kind::S_OPCODE: // OPCODE
@@ -673,6 +708,14 @@ switch (yykind)
         : super_type (token_kind_type (tok), std::move (v))
 #else
       symbol_type (int tok, const int32_t& v)
+        : super_type (token_kind_type (tok), v)
+#endif
+      {}
+#if 201103L <= YY_CPLUSPLUS
+      symbol_type (int tok, std::string v)
+        : super_type (token_kind_type (tok), std::move (v))
+#else
+      symbol_type (int tok, const std::string& v)
         : super_type (token_kind_type (tok), v)
 #endif
       {}
@@ -804,6 +847,96 @@ switch (yykind)
       make_OPCODE (const uint32_t& v)
       {
         return symbol_type (token::OPCODE, v);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_STR (std::string v)
+      {
+        return symbol_type (token::STR, std::move (v));
+      }
+#else
+      static
+      symbol_type
+      make_STR (const std::string& v)
+      {
+        return symbol_type (token::STR, v);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_CONSTANTS ()
+      {
+        return symbol_type (token::CONSTANTS);
+      }
+#else
+      static
+      symbol_type
+      make_CONSTANTS ()
+      {
+        return symbol_type (token::CONSTANTS);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_NAMES ()
+      {
+        return symbol_type (token::NAMES);
+      }
+#else
+      static
+      symbol_type
+      make_NAMES ()
+      {
+        return symbol_type (token::NAMES);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_VARIABLES ()
+      {
+        return symbol_type (token::VARIABLES);
+      }
+#else
+      static
+      symbol_type
+      make_VARIABLES ()
+      {
+        return symbol_type (token::VARIABLES);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_BYTECODE ()
+      {
+        return symbol_type (token::BYTECODE);
+      }
+#else
+      static
+      symbol_type
+      make_BYTECODE ()
+      {
+        return symbol_type (token::BYTECODE);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_COLON ()
+      {
+        return symbol_type (token::COLON);
+      }
+#else
+      static
+      symbol_type
+      make_COLON ()
+      {
+        return symbol_type (token::COLON);
       }
 #endif
 
@@ -1125,9 +1258,9 @@ switch (yykind)
     /// Constants.
     enum
     {
-      yylast_ = 4,     ///< Last index in yytable_.
+      yylast_ = 12,     ///< Last index in yytable_.
       yynnts_ = 3,  ///< Number of nonterminal symbols.
-      yyfinal_ = 5 ///< Termination state number.
+      yyfinal_ = 13 ///< Termination state number.
     };
 
 
@@ -1138,7 +1271,7 @@ switch (yykind)
 
 
 } // yy
-#line 1142 "parser.tab.hh"
+#line 1275 "parser.tab.hh"
 
 
 

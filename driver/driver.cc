@@ -13,7 +13,6 @@ Driver::Driver(std::istream& in, std::ostream& out) : Driver() {
 bool Driver::parse() {
     parser parser(this);
     bool res = parser.parse();
-    assert(res == false);
     return !res;
 }
 
@@ -21,7 +20,15 @@ yy::parser::token_type Driver::yylex(yy::parser::semantic_type* yylval) {
     parser::token_type token = static_cast<parser::token_type>(lexer->yylex());
     if(token == yy::parser::token_type::OPCODE) {
         std::string opcode(lexer->YYText());
+        std::cout << opcode << opcode.size();
         yylval->as<int>() = opcodes[opcode];
+    } else if (token == yy::parser::token_type::I32) {
+        yylval->as<int>() = std::atoi(lexer->YYText());
+    } else if (token == yy::parser::token_type::STR) {
+        std::string str(lexer->YYText());
+        parser::semantic_type tmp;
+        tmp.as<std::string>() = str;
+        yylval->swap<std::string>(tmp);
     }
     return token;
 }

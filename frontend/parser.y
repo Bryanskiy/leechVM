@@ -18,14 +18,23 @@
 
 %token <int32_t>      I32
 %token <uint32_t>     OPCODE
+%token <std::string>  STR
 
+%token                CONSTANTS
+                      NAMES
+                      VARIABLES
+                      BYTECODE
+                      COLON
 %%
 program:  line program      {}
         | /* empty */ 	    {}
 
 line:     OPCODE            {}
         | OPCODE I32        {}
-        | OPCODE I32 I32    {}
+        | BYTECODE COLON    {}
+        | CONSTANTS COLON   {}
+        | NAMES COLON       {}
+        | VARIABLES COLON   {}
 %%
 
 namespace yy {

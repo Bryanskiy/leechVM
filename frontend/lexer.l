@@ -12,8 +12,16 @@ POSITIVE_DIGIT [1-9]
 INT            {POSITIVE_DIGIT}+{DIGIT}*
 
 WORD           [a-zA-Z]
+CAPITAL        [A-Z]
 
 %%
-{WORD}+_{WORD}+  { return yy::parser::token_type::OPCODE; }
-INT              { return yy::parser::token_type::I32; }
+"Constants"            { return yy::parser::token_type::CONSTANTS; }
+"Variables"            { return yy::parser::token_type::VARIABLES; }
+"Names"                { return yy::parser::token_type::NAMES; }
+"Bytecode"             { return yy::parser::token_type::BYTECODE; }
+":"                    { return yy::parser::token_type::COLON; }
+{CAPITAL}_{CAPITAL}+   { return yy::parser::token_type::OPCODE; }
+INT                    { return yy::parser::token_type::I32; }
+WORD                   { return yy::parser::token_type::STR; }
+WS                     {}
 %%

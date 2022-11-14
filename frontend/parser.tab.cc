@@ -157,6 +157,10 @@ namespace yy {
         value.copy< int32_t > (YY_MOVE (that.value));
         break;
 
+      case symbol_kind::S_STR: // STR
+        value.copy< std::string > (YY_MOVE (that.value));
+        break;
+
       case symbol_kind::S_OPCODE: // OPCODE
         value.copy< uint32_t > (YY_MOVE (that.value));
         break;
@@ -194,6 +198,10 @@ namespace yy {
     {
       case symbol_kind::S_I32: // I32
         value.move< int32_t > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_STR: // STR
+        value.move< std::string > (YY_MOVE (s.value));
         break;
 
       case symbol_kind::S_OPCODE: // OPCODE
@@ -304,6 +312,10 @@ namespace yy {
         value.YY_MOVE_OR_COPY< int32_t > (YY_MOVE (that.value));
         break;
 
+      case symbol_kind::S_STR: // STR
+        value.YY_MOVE_OR_COPY< std::string > (YY_MOVE (that.value));
+        break;
+
       case symbol_kind::S_OPCODE: // OPCODE
         value.YY_MOVE_OR_COPY< uint32_t > (YY_MOVE (that.value));
         break;
@@ -325,6 +337,10 @@ namespace yy {
     {
       case symbol_kind::S_I32: // I32
         value.move< int32_t > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_STR: // STR
+        value.move< std::string > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_OPCODE: // OPCODE
@@ -350,6 +366,10 @@ namespace yy {
         value.copy< int32_t > (that.value);
         break;
 
+      case symbol_kind::S_STR: // STR
+        value.copy< std::string > (that.value);
+        break;
+
       case symbol_kind::S_OPCODE: // OPCODE
         value.copy< uint32_t > (that.value);
         break;
@@ -369,6 +389,10 @@ namespace yy {
     {
       case symbol_kind::S_I32: // I32
         value.move< int32_t > (that.value);
+        break;
+
+      case symbol_kind::S_STR: // STR
+        value.move< std::string > (that.value);
         break;
 
       case symbol_kind::S_OPCODE: // OPCODE
@@ -632,6 +656,10 @@ namespace yy {
         yylhs.value.emplace< int32_t > ();
         break;
 
+      case symbol_kind::S_STR: // STR
+        yylhs.value.emplace< std::string > ();
+        break;
+
       case symbol_kind::S_OPCODE: // OPCODE
         yylhs.value.emplace< uint32_t > ();
         break;
@@ -651,37 +679,55 @@ namespace yy {
           switch (yyn)
             {
   case 2: // program: line program
-#line 23 "parser.y"
+#line 29 "parser.y"
                             {}
-#line 657 "parser.tab.cc"
+#line 685 "parser.tab.cc"
     break;
 
   case 3: // program: %empty
-#line 24 "parser.y"
+#line 30 "parser.y"
                             {}
-#line 663 "parser.tab.cc"
+#line 691 "parser.tab.cc"
     break;
 
   case 4: // line: OPCODE
-#line 26 "parser.y"
+#line 32 "parser.y"
                             {}
-#line 669 "parser.tab.cc"
+#line 697 "parser.tab.cc"
     break;
 
   case 5: // line: OPCODE I32
-#line 27 "parser.y"
+#line 33 "parser.y"
                             {}
-#line 675 "parser.tab.cc"
+#line 703 "parser.tab.cc"
     break;
 
-  case 6: // line: OPCODE I32 I32
-#line 28 "parser.y"
+  case 6: // line: BYTECODE COLON
+#line 34 "parser.y"
                             {}
-#line 681 "parser.tab.cc"
+#line 709 "parser.tab.cc"
+    break;
+
+  case 7: // line: CONSTANTS COLON
+#line 35 "parser.y"
+                            {}
+#line 715 "parser.tab.cc"
+    break;
+
+  case 8: // line: NAMES COLON
+#line 36 "parser.y"
+                            {}
+#line 721 "parser.tab.cc"
+    break;
+
+  case 9: // line: VARIABLES COLON
+#line 37 "parser.y"
+                            {}
+#line 727 "parser.tab.cc"
     break;
 
 
-#line 685 "parser.tab.cc"
+#line 731 "parser.tab.cc"
 
             default:
               break;
@@ -859,7 +905,8 @@ namespace yy {
   {
     static const char *const yy_sname[] =
     {
-    "end of file", "error", "invalid token", "I32", "OPCODE", "$accept",
+    "end of file", "error", "invalid token", "I32", "OPCODE", "STR",
+  "CONSTANTS", "NAMES", "VARIABLES", "BYTECODE", "COLON", "$accept",
   "program", "line", YY_NULLPTR
     };
     return yy_sname[yysymbol];
@@ -921,55 +968,60 @@ namespace yy {
   const signed char
   parser::yypact_[] =
   {
-      -4,    -2,     2,    -4,     0,    -5,    -5,    -5
+      -4,    -2,    -3,    -1,     0,     1,     6,    -4,    -5,    -5,
+      -5,    -5,    -5,    -5,    -5
   };
 
   const signed char
   parser::yydefact_[] =
   {
-       3,     4,     0,     3,     5,     1,     2,     6
+       3,     4,     0,     0,     0,     0,     0,     3,     5,     7,
+       8,     9,     6,     1,     2
   };
 
   const signed char
   parser::yypgoto_[] =
   {
-      -5,     1,    -5
+      -5,     5,    -5
   };
 
   const signed char
   parser::yydefgoto_[] =
   {
-       0,     2,     3
+       0,     6,     7
   };
 
   const signed char
   parser::yytable_[] =
   {
-       1,     4,     5,     7,     6
+       1,     8,     2,     3,     4,     5,    13,     9,     0,    10,
+      11,    12,    14
   };
 
   const signed char
   parser::yycheck_[] =
   {
-       4,     3,     0,     3,     3
+       4,     3,     6,     7,     8,     9,     0,    10,    -1,    10,
+      10,    10,     7
   };
 
   const signed char
   parser::yystos_[] =
   {
-       0,     4,     6,     7,     3,     0,     6,     3
+       0,     4,     6,     7,     8,     9,    12,    13,     3,    10,
+      10,    10,    10,     0,    12
   };
 
   const signed char
   parser::yyr1_[] =
   {
-       0,     5,     6,     6,     7,     7,     7
+       0,    11,    12,    12,    13,    13,    13,    13,    13,    13
   };
 
   const signed char
   parser::yyr2_[] =
   {
-       0,     2,     2,     0,     1,     2,     3
+       0,     2,     2,     0,     1,     2,     2,     2,     2,     2
   };
 
 
@@ -979,7 +1031,7 @@ namespace yy {
   const signed char
   parser::yyrline_[] =
   {
-       0,    23,    23,    24,    26,    27,    28
+       0,    29,    29,    30,    32,    33,    34,    35,    36,    37
   };
 
   void
@@ -1043,10 +1095,11 @@ namespace yy {
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     1,     2,     3,     4
+       2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
+       5,     6,     7,     8,     9,    10
     };
     // Last valid token kind.
-    const int code_max = 259;
+    const int code_max = 265;
 
     if (t <= 0)
       return symbol_kind::S_YYEOF;
@@ -1057,9 +1110,9 @@ namespace yy {
   }
 
 } // yy
-#line 1061 "parser.tab.cc"
+#line 1114 "parser.tab.cc"
 
-#line 29 "parser.y"
+#line 38 "parser.y"
 
 
 namespace yy {
