@@ -3,7 +3,6 @@
 %option noyywrap
 %{
 #include <iostream>
-#include "../thirdparty/cpython/Include/opcode.h"
 #include "parser.tab.hh"
 %}
 
@@ -12,9 +11,9 @@ DIGIT          [0-9]
 POSITIVE_DIGIT [1-9]
 INT            {POSITIVE_DIGIT}+{DIGIT}*
 
+WORD           [a-zA-Z]
+
 %%
-"POP_TOP"       {
-                    std::cout << "Hello world!" << std::endl; 
-                    return yy::parser::token_type::OPCODE;
-                }
+{WORD}+_{WORD}+  { return yy::parser::token_type::OPCODE; }
+INT              { return yy::parser::token_type::I32; }
 %%

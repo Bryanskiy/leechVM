@@ -16,8 +16,8 @@
     namespace yy {parser::token_type yylex(parser::semantic_type* yylval, Driver* driver);}
 }
 
-%token <int32_t>     I32
-%token <uint32_t>    OPCODE
+%token <int32_t>      I32
+%token <uint32_t>     OPCODE
 
 %%
 program:  line program      {}
@@ -32,7 +32,6 @@ namespace yy {
 	}
 
     void parser::error (const std::string& msg) {
-		std::cout << msg << std::endl;
 	}
 
 	void parser::report_syntax_error(parser::context const& ctx) const {

@@ -340,9 +340,9 @@ int yyFlexLexer::yywrap() { return 1;}
 /* END of m4 controls */
 
 /* START of Flex-generated definitions */
-#define YY_NUM_RULES 2
-#define YY_END_OF_BUFFER 3
-#define YY_JAMBASE 15
+#define YY_NUM_RULES 3
+#define YY_END_OF_BUFFER 4
+#define YY_JAMBASE 16
 #define YY_JAMSTATE 12
 #define YY_NUL_EC 1
 #define YY_OFFSET_TYPE flex_int16_t
@@ -377,7 +377,7 @@ struct yy_trans_info
 
 /* %% [2.0] data tables for the DFA are inserted here */
 
-/* footprint: 1782 bytes */
+/* footprint: 1687 bytes */
 
 /* m4 controls begin */
 /* M4_MODE_HAS_BACKING_UP */
@@ -385,8 +385,8 @@ struct yy_trans_info
 /* m4 controls end */
 
 static const flex_int16_t yy_accept[13] = { 0,
-         0,    0,    3,    2,    2,    0,    0,    0,    0,    0,
-         1,    0
+         0,    0,    4,    3,    3,    3,    0,    0,    0,    1,
+         2,    0
 };
 
 /* Character equivalence-class mapping */
@@ -397,14 +397,14 @@ static const YY_CHAR yy_ec[256] = { 0,
          1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
          1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
          1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-         1,    1,    1,    1,    1,    1,    1,    1,    2,    3,
-         1,    1,    1,    4,    1,    1,    1,    1,    1,    1,
-         1,    1,    1,    1,    5,    1,    1,    1,    1,    1,
+         1,    1,    1,    1,    2,    2,    2,    2,    2,    2,
+         2,    2,    3,    2,    2,    2,    2,    4,    2,    2,
+         2,    2,    2,    5,    2,    2,    2,    2,    2,    2,
+         1,    1,    1,    1,    6,    1,    2,    2,    2,    2,
 
-         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+         2,    2,    2,    2,    2,    2,    2,    2,    2,    2,
+         2,    2,    2,    2,    2,    2,    2,    2,    2,    2,
+         2,    2,    1,    1,    1,    1,    1,    1,    1,    1,
          1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
          1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
          1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -422,28 +422,30 @@ static const YY_CHAR yy_ec[256] = { 0,
 };
 
 /* Character meta-equivalence-class mappings */
-static const YY_CHAR yy_meta[6] = { 0,
-         1,    2,    3,    4,    5
+static const YY_CHAR yy_meta[7] = { 0,
+         1,    2,    2,    2,    2,    3
 };
 
-static const flex_int16_t yy_base[20] = { 0,
-        11,   10,   12,   15,    0,    0,    0,    0,    0,    0,
-        15,   15,    0,    9,    7,    4,    4,    5,    3
+static const flex_int16_t yy_base[15] = { 0,
+         0,    0,   15,   16,    8,    3,    7,    0,    7,    0,
+         0,   16,    8,    6
 };
 
-static const flex_int16_t yy_def[20] = { 0,
-        13,   13,   12,   12,   14,   15,   16,   17,   18,   19,
-        12,    0,   12,   12,   12,   12,   12,   12,   12
+static const flex_int16_t yy_def[15] = { 0,
+        12,    1,   12,   12,   13,   13,   13,   14,    7,   14,
+         7,    0,   12,   12
 };
 
-static const flex_int16_t yy_nxt[21] = { 0,
-         4,    4,    4,    4,    4,   11,   10,    9,    8,    7,
-         6,   12,    5,    5,    3,   12,   12,   12,   12,   12
+static const flex_int16_t yy_nxt[23] = { 0,
+         4,    5,    6,    5,    5,    4,    9,   10,    8,    7,
+         7,   11,    8,    8,   12,    3,   12,   12,   12,   12,
+        12,   12
 };
 
-static const flex_int16_t yy_chk[21] = { 0,
-        13,   13,   13,   13,   13,   19,   18,   17,   16,   15,
-        14,    3,    2,    1,   12,   12,   12,   12,   12,   12
+static const flex_int16_t yy_chk[23] = { 0,
+         1,    1,    1,    1,    1,    1,    6,   14,    6,   13,
+        13,    9,    7,    5,    3,   12,   12,   12,   12,   12,
+        12,   12
 };
 
 /* The intent behind this definition is that it'll catch
@@ -461,7 +463,6 @@ static const flex_int16_t yy_chk[21] = { 0,
 /* makes the scanner not call yywrap() upon an end-of-file */
 #line 5 "lexer.l"
 #include <iostream>
-#include "../thirdparty/cpython/Include/opcode.h"
 #include "parser.tab.hh"
 
 
@@ -627,7 +628,7 @@ YY_DECL {
 	/* open scope of user declarationns */
 	{
 /* %% [4.0] user's declarations go here */
-#line 15 "lexer.l"
+#line 16 "lexer.l"
 
 
 
@@ -723,16 +724,19 @@ YY_DECL {
 	case 1:
 YY_RULE_SETUP
 
-#line 16 "lexer.l"
-{
-                    std::cout << "Hello world!" << std::endl; 
-                    return yy::parser::token_type::OPCODE;
-                }
+#line 17 "lexer.l"
+{ return yy::parser::token_type::OPCODE; }
 	/*LINTED*/break;
 	case 2:
 YY_RULE_SETUP
 
-#line 20 "lexer.l"
+#line 18 "lexer.l"
+{ return yy::parser::token_type::I32; }
+	/*LINTED*/break;
+	case 3:
+YY_RULE_SETUP
+
+#line 19 "lexer.l"
 yyecho();
 	/*LINTED*/break;
 
@@ -1749,6 +1753,6 @@ void yyfree (void * ptr ) {
 			free( (char *) ptr );	/* see yyrealloc() for (char *) cast */
 }
 
-#line 20 "lexer.l"
+#line 19 "lexer.l"
 
 
