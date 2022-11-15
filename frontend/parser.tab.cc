@@ -1121,7 +1121,7 @@ namespace yy {
 	}
 
     void parser::error (const std::string& msg) {
-        std::cout << msg << std::endl;
+        // std::cout << msg << std::endl;
 	}
 
 	void parser::report_syntax_error(parser::context const& ctx) const {

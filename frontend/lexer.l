@@ -6,22 +6,19 @@
 #include "parser.tab.hh"
 %}
 
-WS [ \t\n\v]+
-DIGIT          [0-9]
-POSITIVE_DIGIT [1-9]
-INT            {POSITIVE_DIGIT}+{DIGIT}*
-
-WORD           [a-zA-Z]
-CAPITAL        [A-Z]
+WS             [ \t\n\v]+
+INT            [0]|[1-9][0-9]*
+NAME           [a-z][a-z0-9]*
+OPCODE         [A-Z]+[_A-Z]+
 
 %%
+{WS}                   {}
 "Constants"            { return yy::parser::token_type::CONSTANTS; }
 "Variables"            { return yy::parser::token_type::VARIABLES; }
 "Names"                { return yy::parser::token_type::NAMES; }
 "Bytecode"             { return yy::parser::token_type::BYTECODE; }
 ":"                    { return yy::parser::token_type::COLON; }
-{CAPITAL}_{CAPITAL}+   { return yy::parser::token_type::OPCODE; }
-INT                    { return yy::parser::token_type::I32; }
-WORD                   { return yy::parser::token_type::STR; }
-WS                     {}
+{OPCODE}               { return yy::parser::token_type::OPCODE; }
+{INT}                  { return yy::parser::token_type::I32; }
+{NAME}                 { return yy::parser::token_type::STR; }
 %%

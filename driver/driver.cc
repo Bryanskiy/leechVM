@@ -20,7 +20,6 @@ yy::parser::token_type Driver::yylex(yy::parser::semantic_type* yylval) {
     parser::token_type token = static_cast<parser::token_type>(lexer->yylex());
     if(token == yy::parser::token_type::OPCODE) {
         std::string opcode(lexer->YYText());
-        std::cout << opcode << opcode.size();
         yylval->as<int>() = opcodes[opcode];
     } else if (token == yy::parser::token_type::I32) {
         yylval->as<int>() = std::atoi(lexer->YYText());
