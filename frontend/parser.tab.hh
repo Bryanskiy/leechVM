@@ -436,7 +436,7 @@ namespace yy {
     STR = 260,                     // STR
     CONSTANTS = 261,               // CONSTANTS
     NAMES = 262,                   // NAMES
-    VARIABLES = 263,               // VARIABLES
+    VARNAMES = 263,                // VARNAMES
     BYTECODE = 264,                // BYTECODE
     COLON = 265                    // COLON
       };
@@ -465,12 +465,19 @@ namespace yy {
         S_STR = 5,                               // STR
         S_CONSTANTS = 6,                         // CONSTANTS
         S_NAMES = 7,                             // NAMES
-        S_VARIABLES = 8,                         // VARIABLES
+        S_VARNAMES = 8,                          // VARNAMES
         S_BYTECODE = 9,                          // BYTECODE
         S_COLON = 10,                            // COLON
         S_YYACCEPT = 11,                         // $accept
         S_program = 12,                          // program
-        S_line = 13                              // line
+        S_section = 13,                          // section
+        S_bytecodes = 14,                        // bytecodes
+        S_opcodes = 15,                          // opcodes
+        S_names = 16,                            // names
+        S_strings = 17,                          // strings
+        S_varnames = 18,                         // varnames
+        S_constants = 19,                        // constants
+        S_numbers = 20                           // numbers
       };
     };
 
@@ -897,16 +904,16 @@ switch (yykind)
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_VARIABLES ()
+      make_VARNAMES ()
       {
-        return symbol_type (token::VARIABLES);
+        return symbol_type (token::VARNAMES);
       }
 #else
       static
       symbol_type
-      make_VARIABLES ()
+      make_VARNAMES ()
       {
-        return symbol_type (token::VARIABLES);
+        return symbol_type (token::VARNAMES);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
@@ -1258,9 +1265,9 @@ switch (yykind)
     /// Constants.
     enum
     {
-      yylast_ = 12,     ///< Last index in yytable_.
-      yynnts_ = 3,  ///< Number of nonterminal symbols.
-      yyfinal_ = 13 ///< Termination state number.
+      yylast_ = 24,     ///< Last index in yytable_.
+      yynnts_ = 10,  ///< Number of nonterminal symbols.
+      yyfinal_ = 15 ///< Termination state number.
     };
 
 
@@ -1271,7 +1278,7 @@ switch (yykind)
 
 
 } // yy
-#line 1275 "parser.tab.hh"
+#line 1282 "parser.tab.hh"
 
 
 

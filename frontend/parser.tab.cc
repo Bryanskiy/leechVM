@@ -678,56 +678,110 @@ namespace yy {
         {
           switch (yyn)
             {
-  case 2: // program: line program
+  case 2: // program: section program
 #line 29 "parser.y"
-                            {}
+                                      {}
 #line 685 "parser.tab.cc"
     break;
 
   case 3: // program: %empty
 #line 30 "parser.y"
-                            {}
+                                          {}
 #line 691 "parser.tab.cc"
     break;
 
-  case 4: // line: OPCODE
+  case 4: // section: bytecodes
 #line 32 "parser.y"
-                            {}
+                                      {}
 #line 697 "parser.tab.cc"
     break;
 
-  case 5: // line: OPCODE I32
+  case 5: // section: names
 #line 33 "parser.y"
-                            {}
+                                      {}
 #line 703 "parser.tab.cc"
     break;
 
-  case 6: // line: BYTECODE COLON
+  case 6: // section: constants
 #line 34 "parser.y"
-                            {}
+                                      {}
 #line 709 "parser.tab.cc"
     break;
 
-  case 7: // line: CONSTANTS COLON
+  case 7: // section: varnames
 #line 35 "parser.y"
-                            {}
+                                      {}
 #line 715 "parser.tab.cc"
     break;
 
-  case 8: // line: NAMES COLON
-#line 36 "parser.y"
-                            {}
+  case 8: // bytecodes: BYTECODE COLON opcodes
+#line 37 "parser.y"
+                                      {}
 #line 721 "parser.tab.cc"
     break;
 
-  case 9: // line: VARIABLES COLON
-#line 37 "parser.y"
-                            {}
+  case 9: // opcodes: OPCODE I32 opcodes
+#line 39 "parser.y"
+                                      { driver->insertCode(yystack_[2].value.as < uint32_t > (), yystack_[1].value.as < int32_t > ()); }
 #line 727 "parser.tab.cc"
     break;
 
+  case 10: // opcodes: OPCODE opcodes
+#line 40 "parser.y"
+                                      { driver->insertCode(yystack_[1].value.as < uint32_t > ()); }
+#line 733 "parser.tab.cc"
+    break;
 
-#line 731 "parser.tab.cc"
+  case 11: // opcodes: %empty
+#line 41 "parser.y"
+                                      {}
+#line 739 "parser.tab.cc"
+    break;
+
+  case 12: // names: NAMES COLON strings
+#line 43 "parser.y"
+                                      {}
+#line 745 "parser.tab.cc"
+    break;
+
+  case 13: // strings: I32 COLON STR strings
+#line 44 "parser.y"
+                                      { driver->insertName(yystack_[3].value.as < int32_t > (), yystack_[1].value.as < std::string > ()); }
+#line 751 "parser.tab.cc"
+    break;
+
+  case 14: // strings: %empty
+#line 45 "parser.y"
+                                      {}
+#line 757 "parser.tab.cc"
+    break;
+
+  case 15: // varnames: VARNAMES COLON strings
+#line 47 "parser.y"
+                                      {}
+#line 763 "parser.tab.cc"
+    break;
+
+  case 16: // constants: CONSTANTS COLON numbers
+#line 49 "parser.y"
+                                      {}
+#line 769 "parser.tab.cc"
+    break;
+
+  case 17: // numbers: I32 COLON I32 numbers
+#line 50 "parser.y"
+                                      { driver->insertConsts(yystack_[3].value.as < int32_t > (), yystack_[1].value.as < int32_t > ()); }
+#line 775 "parser.tab.cc"
+    break;
+
+  case 18: // numbers: %empty
+#line 51 "parser.y"
+                                      {}
+#line 781 "parser.tab.cc"
+    break;
+
+
+#line 785 "parser.tab.cc"
 
             default:
               break;
@@ -906,8 +960,9 @@ namespace yy {
     static const char *const yy_sname[] =
     {
     "end of file", "error", "invalid token", "I32", "OPCODE", "STR",
-  "CONSTANTS", "NAMES", "VARIABLES", "BYTECODE", "COLON", "$accept",
-  "program", "line", YY_NULLPTR
+  "CONSTANTS", "NAMES", "VARNAMES", "BYTECODE", "COLON", "$accept",
+  "program", "section", "bytecodes", "opcodes", "names", "strings",
+  "varnames", "constants", "numbers", YY_NULLPTR
     };
     return yy_sname[yysymbol];
   }
@@ -961,67 +1016,77 @@ namespace yy {
 
 
 
-  const signed char parser::yypact_ninf_ = -5;
+  const signed char parser::yypact_ninf_ = -22;
 
   const signed char parser::yytable_ninf_ = -1;
 
   const signed char
   parser::yypact_[] =
   {
-      -4,    -2,    -3,    -1,     0,     1,     6,    -4,    -5,    -5,
-      -5,    -5,    -5,    -5,    -5
+       0,    -6,     1,     2,     3,    10,     0,   -22,   -22,   -22,
+     -22,    11,    12,    12,    13,   -22,   -22,     8,   -22,     9,
+     -22,   -22,    -1,   -22,    17,    16,    13,   -22,    11,    12,
+     -22,   -22,   -22
   };
 
   const signed char
   parser::yydefact_[] =
   {
-       3,     4,     0,     0,     0,     0,     0,     3,     5,     7,
-       8,     9,     6,     1,     2
+       3,     0,     0,     0,     0,     0,     3,     4,     5,     7,
+       6,    18,    14,    14,    11,     1,     2,     0,    16,     0,
+      12,    15,    11,     8,     0,     0,    11,    10,    18,    14,
+       9,    17,    13
   };
 
   const signed char
   parser::yypgoto_[] =
   {
-      -5,     5,    -5
+     -22,    18,   -22,   -22,   -21,   -22,   -13,   -22,   -22,    -5
   };
 
   const signed char
   parser::yydefgoto_[] =
   {
-       0,     6,     7
+       0,     5,     6,     7,    23,     8,    20,     9,    10,    18
   };
 
   const signed char
   parser::yytable_[] =
   {
-       1,     8,     2,     3,     4,     5,    13,     9,     0,    10,
-      11,    12,    14
+      21,    27,    26,    22,    11,    30,     1,     2,     3,     4,
+      15,    12,    13,    14,    17,    19,    32,    22,    24,    25,
+      28,    29,     0,    31,    16
   };
 
   const signed char
   parser::yycheck_[] =
   {
-       4,     3,     6,     7,     8,     9,     0,    10,    -1,    10,
-      10,    10,     7
+      13,    22,     3,     4,    10,    26,     6,     7,     8,     9,
+       0,    10,    10,    10,     3,     3,    29,     4,    10,    10,
+       3,     5,    -1,    28,     6
   };
 
   const signed char
   parser::yystos_[] =
   {
-       0,     4,     6,     7,     8,     9,    12,    13,     3,    10,
-      10,    10,    10,     0,    12
+       0,     6,     7,     8,     9,    12,    13,    14,    16,    18,
+      19,    10,    10,    10,    10,     0,    12,     3,    20,     3,
+      17,    17,     4,    15,    10,    10,     3,    15,     3,     5,
+      15,    20,    17
   };
 
   const signed char
   parser::yyr1_[] =
   {
-       0,    11,    12,    12,    13,    13,    13,    13,    13,    13
+       0,    11,    12,    12,    13,    13,    13,    13,    14,    15,
+      15,    15,    16,    17,    17,    18,    19,    20,    20
   };
 
   const signed char
   parser::yyr2_[] =
   {
-       0,     2,     2,     0,     1,     2,     2,     2,     2,     2
+       0,     2,     2,     0,     1,     1,     1,     1,     3,     3,
+       2,     0,     3,     4,     0,     3,     3,     4,     0
   };
 
 
@@ -1031,7 +1096,8 @@ namespace yy {
   const signed char
   parser::yyrline_[] =
   {
-       0,    29,    29,    30,    32,    33,    34,    35,    36,    37
+       0,    29,    29,    30,    32,    33,    34,    35,    37,    39,
+      40,    41,    43,    44,    45,    47,    49,    50,    51
   };
 
   void
@@ -1110,9 +1176,9 @@ namespace yy {
   }
 
 } // yy
-#line 1114 "parser.tab.cc"
+#line 1180 "parser.tab.cc"
 
-#line 38 "parser.y"
+#line 54 "parser.y"
 
 
 namespace yy {

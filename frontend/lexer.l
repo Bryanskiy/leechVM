@@ -14,7 +14,7 @@ OPCODE         [A-Z]+[_A-Z]+
 %%
 {WS}                   {}
 "Constants"            { return yy::parser::token_type::CONSTANTS; }
-"Variables"            { return yy::parser::token_type::VARIABLES; }
+"Varnames"             { return yy::parser::token_type::VARNAMES; }
 "Names"                { return yy::parser::token_type::NAMES; }
 "Bytecode"             { return yy::parser::token_type::BYTECODE; }
 ":"                    { return yy::parser::token_type::COLON; }

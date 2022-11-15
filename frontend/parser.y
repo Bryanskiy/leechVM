@@ -22,19 +22,35 @@
 
 %token                CONSTANTS
                       NAMES
-                      VARIABLES
+                      VARNAMES
                       BYTECODE
                       COLON
 %%
-program:  line program      {}
-        | /* empty */ 	    {}
+program:    section program           {}
+          | /* empty */ 	          {}
 
-line:     OPCODE            {}
-        | OPCODE I32        {}
-        | BYTECODE COLON    {}
-        | CONSTANTS COLON   {}
-        | NAMES COLON       {}
-        | VARIABLES COLON   {}
+section:    bytecodes                 {}
+          | names                     {}
+          | constants                 {}
+          | varnames                  {}
+
+bytecodes:  BYTECODE COLON opcodes    {}
+
+opcodes:   OPCODE I32 opcodes         { driver->insertCode($1, $2); }
+         | OPCODE opcodes             { driver->insertCode($1); }
+         | /* empty */ 	              {}
+
+names:     NAMES COLON strings        {}
+strings:   I32 COLON STR strings      { driver->insertName($1, $3); }
+         | /* empty */ 	              {}
+
+varnames:  VARNAMES  COLON strings    {}
+
+constants: CONSTANTS COLON numbers    {}
+numbers:   I32 COLON I32 numbers      { driver->insertConsts($1, $3); }
+         | /* empty */ 	              {}
+
+
 %%
 
 namespace yy {
