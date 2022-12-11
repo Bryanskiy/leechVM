@@ -6,7 +6,7 @@
 #include <unordered_map>
 
 namespace leech {
-enum class Opcodes {
+enum class Opcodes : std::uint8_t {
   UNKNOWN,
 #define LEECH_MAKE_OPCODE(opc) opc,
 
