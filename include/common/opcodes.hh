@@ -1,9 +1,7 @@
 #ifndef __INCLUDE_COMMON_OPCODES_HH__
 #define __INCLUDE_COMMON_OPCODES_HH__
 
-#include <concepts>
 #include <optional>
-#include <string>
 #include <string_view>
 #include <unordered_map>
 
@@ -16,9 +14,6 @@ enum class Opcodes {
 
 #undef LEECH_MAKE_OPCODE
 };
-
-template <class T>
-concept StringLike = std::is_convertible_v<T, std::string_view>;
 
 class OpcodeConv final {
 private:
@@ -55,8 +50,7 @@ private:
 public:
   OpcodeConv() = delete;
 
-  template <StringLike T>
-  static std::optional<Opcodes> fromName(const T &name) {
+  static std::optional<Opcodes> fromName(std::string_view name) {
     const auto &toOpcodeMap = getStrToOpcodeMap();
     return getOptFromMap(toOpcodeMap, name);
   }
