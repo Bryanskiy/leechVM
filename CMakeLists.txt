@@ -44,6 +44,9 @@ if(BUILD_TESTS)
 endif()
 
 find_package(spdlog REQUIRED)
+find_package(BISON 3.7 REQUIRED)
+find_package(FLEX REQUIRED)
+
 message("Found package: spdlog")
 
 add_subdirectory(docs)
@@ -61,9 +64,6 @@ list(APPEND TARGETS ${LIBLIST} ${TOOLLIST})
 
 foreach(TARGET ${TARGETS})
   target_include_directories(${TARGET} PRIVATE ${CMAKE_SOURCE_DIR}/include)
-  target_include_directories(${TARGET}
-                             PUBLIC ${CMAKE_BINARY_DIR}/include/codegen)
-  add_dependencies(${TARGET} DecoderGenerator)
   target_compile_features(${TARGET} PRIVATE cxx_std_20)
   target_link_libraries(${TARGET} PRIVATE spdlog::spdlog)
   apply_compiler_flags(${TARGET} PUBLIC)
