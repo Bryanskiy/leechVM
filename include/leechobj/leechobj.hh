@@ -23,13 +23,14 @@ public:
     serializeTypeNSize(ost);
     serializeVal(ost);
   }
-  std::size_t serializedSize() const override final { return size_; }
 
 protected:
   void serializeTypeNSize(std::ostream &ost) const {
     serializeNum(ost, toUnderlying(type_));
     serializeNum(ost, size_);
   }
+
+  auto getSize() const { return size_; }
 
 private:
   virtual void serializeVal(std::ostream &) const = 0;
@@ -76,7 +77,7 @@ public:
       ConvToLeechPtr<typename std::iterator_traits<It>::value_type>
       : LeechObj(static_cast<std::size_t>(std::distance(begin, end)),
                  ValueType::Tuple),
-        tuple_(serializedSize()) {
+        tuple_(getSize()) {
     std::move(begin, end, tuple_.begin());
   }
 

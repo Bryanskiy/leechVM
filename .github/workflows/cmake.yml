@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        compiler: [g++-11, clang++-12]
+        compiler: [g++-10, clang++-12]
         generator: [Unix Makefiles, Ninja]
         build_type: [Debug, Release]
         include:

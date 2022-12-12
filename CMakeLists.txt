@@ -22,7 +22,7 @@ macro(check_compiler_version COMPILER VER)
   endif()
 endmacro()
 
-check_compiler_version("GNU" "11.3.0")
+check_compiler_version("GNU" "10.3.0")
 check_compiler_version("MSVC" "14.32.31326")
 check_compiler_version("Clang" "12.0.0")
 

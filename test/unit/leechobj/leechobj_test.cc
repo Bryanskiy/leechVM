@@ -17,7 +17,7 @@ TEST(Serialize, Int) {
   integer.serialize(ss);
 
   // Assert
-  EXPECT_EQ(ss.view(), answ);
+  EXPECT_EQ(ss.str(), answ);
 }
 
 TEST(Serialize, Float) {
@@ -32,7 +32,7 @@ TEST(Serialize, Float) {
   flt.serialize(ss);
 
   // Assert
-  EXPECT_EQ(ss.view(), answ);
+  EXPECT_EQ(ss.str(), answ);
 }
 
 TEST(Serialize, String) {
@@ -47,7 +47,7 @@ TEST(Serialize, String) {
   str.serialize(ss);
 
   // Assert
-  EXPECT_EQ(ss.view(), answ);
+  EXPECT_EQ(ss.str(), answ);
 }
 
 TEST(Serialize, Tuple) {
@@ -73,7 +73,7 @@ TEST(Serialize, Tuple) {
   tuple.serialize(ss);
 
   // Assert
-  EXPECT_EQ(ss.view(), answ);
+  EXPECT_EQ(ss.str(), answ);
 }
 
 #include "test_footer.hh"
