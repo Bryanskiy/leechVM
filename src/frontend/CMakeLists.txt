@@ -10,12 +10,20 @@ message(STATUS "flex files generated in: ${FLEX_lexer_OUTPUTS}")
 
 add_flex_bison_dependency(lexer parser)
 
-add_library(lex ${FLEX_lexer_OUTPUTS})
-add_library(par ${GRAMMAR_GEN}/parser.cc)
+add_library(lex ${FLEX_lexer_OUTPUTS} lLexer.cc)
+add_library(par ${BISON_parser_OUTPUTS})
 target_include_directories(
   par SYSTEM
   PUBLIC ${GRAMMAR_GEN}
-  PUBLIC ${CMAKE_SOURCE_DIR}/include)
+  PUBLIC ${CMAKE_SOURCE_DIR}/include
+)
+
+target_include_directories(
+    lex SYSTEM
+    PUBLIC ${GRAMMAR_GEN}
+    PUBLIC ${CMAKE_SOURCE_DIR}/include
+)
 
 add_library(frontend frontend.cc)
+format_target(lex ${CMAKE_CURRENT_SOURCE_DIR} lLexer.cc)
 target_link_libraries(frontend PUBLIC lex par)
