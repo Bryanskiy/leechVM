@@ -1,10 +1,6 @@
 #ifndef __INCLUDE_FRONTEND_FRONTEND_HH__
 #define __INCLUDE_FRONTEND_FRONTEND_HH__
 
-#ifndef yyFlexLexer
-#include <FlexLexer.h>
-#endif
-
 #include <array>
 #include <fstream>
 #include <memory>
@@ -12,7 +8,6 @@
 #include <string>
 
 #include "lLexer.hh"
-#include "parser.hh"
 
 namespace yy {
 
