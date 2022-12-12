@@ -27,13 +27,22 @@ public:
 protected:
   void serializeTypeNSize(std::ostream &ost) const {
     serializeNum(ost, toUnderlying(type_));
-    serializeNum(ost, size_);
+    if (type_ != ValueType::None)
+      serializeNum(ost, size_);
   }
 
   auto getSize() const { return size_; }
 
 private:
   virtual void serializeVal(std::ostream &) const = 0;
+};
+
+class NoneObj final : public LeechObj {
+public:
+  NoneObj() : LeechObj(0, ValueType::None) {}
+
+private:
+  void serializeVal(std::ostream &) const override {}
 };
 
 template <NumberLeech T> class NumberObj final : public LeechObj {
@@ -48,6 +57,9 @@ private:
     serializeNum(ost, value_);
   }
 };
+
+using IntObj = NumberObj<Integer>;
+using FloatObj = NumberObj<Float>;
 
 class StringObj final : public LeechObj {
   std::string string_;

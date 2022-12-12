@@ -76,4 +76,15 @@ TEST(Serialize, Tuple) {
   EXPECT_EQ(ss.str(), answ);
 }
 
+TEST(Serialize, None) {
+  // Assign
+  NoneObj none;
+  std::ostringstream ss;
+  std::string_view answ("\x5");
+  // Act
+  none.serialize(ss);
+  // Assert
+  EXPECT_EQ(ss.str(), answ);
+}
+
 #include "test_footer.hh"
