@@ -24,6 +24,8 @@ public:
     serializeVal(ost);
   }
 
+  virtual void print() const = 0;
+
 protected:
   void serializeTypeNSize(std::ostream &ost) const {
     serializeNum(ost, toUnderlying(type_));
@@ -41,6 +43,8 @@ class NoneObj final : public LeechObj {
 public:
   NoneObj() : LeechObj(0, ValueType::None) {}
 
+  void print() const override { std::cout << "None" << std::endl; }
+
 private:
   void serializeVal(std::ostream &) const override {}
 };
@@ -51,6 +55,8 @@ template <NumberLeech T> class NumberObj final : public LeechObj {
 public:
   explicit NumberObj(T value)
       : LeechObj(sizeof(T), typeToValueType<T>()), value_(value) {}
+
+  void print() const override { std::cout << value_ << std::endl; }
 
 private:
   void serializeVal(std::ostream &ost) const override {
@@ -67,6 +73,10 @@ class StringObj final : public LeechObj {
 public:
   explicit StringObj(std::string_view string)
       : LeechObj(string.size(), ValueType::String), string_(string) {}
+
+  void print() const override {
+    std::cout << '"' << string_ << '"' << std::endl;
+  }
 
 private:
   void serializeVal(std::ostream &ost) const override {
@@ -97,6 +107,15 @@ public:
   explicit TupleObj(Cont &&cont) requires
       ConvToLeechPtr<typename Cont::value_type>
       : TupleObj(cont.begin(), cont.end()) {}
+
+  void print() const override {
+    std::cout << '(';
+    for (auto &&elem : tuple_) {
+      elem->print();
+      std::cout << ',';
+    }
+    std::cout << ')' << std::endl;
+  }
 
 private:
   void serializeVal(std::ostream &ost) const override {
