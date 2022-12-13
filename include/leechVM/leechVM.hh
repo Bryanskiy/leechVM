@@ -1,6 +1,7 @@
 #ifndef __INCLUDE_LEECHVM_LEECHVM_HH__
 #define __INCLUDE_LEECHVM_LEECHVM_HH__
 
+#include "executor/executor.hh"
 #include "frontend/frontend.hh"
 
 namespace leech {

@@ -1,38 +1,49 @@
-.func array
+.func main
     .cpool
-        0: (1, 2, 3, 4, 5)
-        1: 0
-        2: 5
+        0: 100
+        1: (1, 2, 3, 4, 5, 6)
+        2: 0
+        3: 6
+        4: 1
     .names
         0: array
         1: i
         2: sum
     .code
-            BUILD_LIST               0
-            LOAD_CONST               1
-            LIST_EXTEND              1
-            STORE_FAST               0
-            LOAD_CONST               2
-            STORE_FAST               1
-            LOAD_CONST               2
-            STORE_FAST               2
-            LOAD_FAST                1
-            LOAD_CONST               3
-            COMPARE_OP               0
-            POP_JUMP_IF_FALSE        : fst
-        .label scd
-            LOAD_FAST                2
-            LOAD_FAST                0
-            LOAD_FAST                1
-            BINARY_SUBSCR
-            INPLACE_ADD
-            STORE_FAST               2
-            LOAD_FAST                1
-            LOAD_CONST               3
-            COMPARE_OP               0
-            POP_JUMP_IF_TRUE         : scd
-            LOAD_CONST               0
-            RETURN_VALUE
-        .label fst
-            LOAD_CONST               0
-            RETURN_VALUE
+        LOAD_CONST  1
+        STORE_FAST  0
+
+        LOAD_CONST  2
+        STORE_FAST  1
+
+        LOAD_CONST  2
+        STORE_FAST  2
+
+        LOAD_FAST   1
+        LOAD_CONST  3
+        COMPARE_OP  0
+        POP_JUMP_IF_FALSE : sec
+    .label fst
+        LOAD_FAST 2
+        LOAD_FAST 0
+        LOAD_FAST 1
+        BINARY_SUBSCR
+        BINARY_ADD
+        STORE_FAST 2
+
+        LOAD_FAST 1
+        LOAD_CONST 4
+        BINARY_ADD
+        STORE_FAST 1
+
+        LOAD_FAST 1
+        LOAD_CONST 3
+        COMPARE_OP 0
+        POP_JUMP_IF_TRUE : fst
+    .label sec
+        LOAD_FAST 2
+        LOAD_CONST 3
+        BINARY_TRUE_DIVIDE
+        PRINT
+        LOAD_CONST 0
+        RETURN_VALUE

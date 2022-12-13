@@ -35,6 +35,8 @@ public:
   virtual pLeechObj clone() const = 0;
   [[noreturn]] virtual bool compare(LeechObj *obj, CmpOp op) const;
   [[noreturn]] virtual pLeechObj add(LeechObj *obj) const;
+  [[noreturn]] virtual pLeechObj div(LeechObj *obj) const;
+  [[noreturn]] virtual pLeechObj subscript(LeechObj *obj) const;
 
   auto getType() const { return type_; }
 
@@ -84,8 +86,19 @@ public:
     return std::make_unique<NumberObj>(value_);
   }
 
-  bool compare(LeechObj *obj, CmpOp op) const override {
+  pLeechObj div(LeechObj *obj) const override {
     if (obj->getType() != getType())
+      throw std::invalid_argument("Can't divide");
+
+    auto *pObj = dynamic_cast<NumberObj<T> *>(obj);
+    if (pObj == nullptr)
+      throw std::runtime_error("Dynamic cast failed");
+    return std::make_shared<NumberObj<Float>>(static_cast<Float>(value_) /
+                                              static_cast<Float>(pObj->value_));
+  }
+
+  bool compare(LeechObj *obj, CmpOp op) const override {
+    if (obj->getType() != getType() || getType() != ValueType::Integer)
       throw std::invalid_argument("Can't compare");
 
     auto *pObj = dynamic_cast<NumberObj<T> *>(obj);
@@ -118,6 +131,8 @@ public:
       throw std::runtime_error("Dynamic cast failed");
     return std::make_unique<NumberObj>(pobj->value_ + value_);
   }
+
+  auto getVal() const { return value_; }
 
 private:
   void serializeVal(std::ostream &ost) const override {
@@ -178,6 +193,15 @@ public:
       std::cout << ',';
     }
     std::cout << ')';
+  }
+
+  pLeechObj subscript(LeechObj *pobj) const override {
+    if (pobj->getType() != ValueType::Integer)
+      throw std::invalid_argument("Incorrect subscription index");
+
+    auto *numObj = dynamic_cast<IntObj *>(pobj);
+
+    return tuple_.at(static_cast<std::size_t>(numObj->getVal()));
   }
 
   pLeechObj clone() const override {

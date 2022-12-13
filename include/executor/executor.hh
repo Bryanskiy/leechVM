@@ -15,6 +15,7 @@ constexpr std::string_view kMainFuncName = "main";
 class StackFrame final {
   const FuncMeta *pmeta_ = nullptr;
   std::stack<pLeechObj> dataStack_{};
+  std::uint64_t retAddr_ = {};
   std::unordered_map<std::string, pLeechObj> vars_{};
 
 public:
@@ -30,29 +31,38 @@ public:
     dataStack_.emplace(new T(std::forward<Args>(args)...));
   }
 
+  auto getRet() const { return retAddr_; }
+  void setRet(auto val) { retAddr_ = val; }
+
+  template <std::input_iterator T>
+  void fillArgs(T beg, T end) requires
+      std::is_same_v<typename std::iterator_traits<T>::value_type, pLeechObj> {
+    for (auto &name : pmeta_->names) {
+      if (beg == end)
+        break;
+      setVar(name, *beg++);
+    }
+  }
+
   void setVar(std::string_view name, pLeechObj obj) {
-    setVar(std::string(name), std::move(obj));
+    setVar(std::string(name), obj);
   }
 
-  void setVar(const std::string &name, pLeechObj obj) {
-    vars_.at(name) = std::move(obj);
-  }
+  auto stackSize() const { return dataStack_.size(); }
 
-  const auto *getVar(const std::string &name) const {
-    return vars_.at(name).get();
-  }
+  void setVar(const std::string &name, pLeechObj obj) { vars_.at(name) = obj; }
 
-  const auto *getVar(std::string_view name) const {
-    return getVar(std::string(name));
-  }
+  auto getVar(const std::string &name) const { return vars_.at(name); }
+
+  auto getVar(std::string_view name) const { return getVar(std::string(name)); }
 
   void push(pLeechObj obj);
 
-  auto getConst(ArgType idx) const { return pmeta_->cstPool.at(idx).get(); }
+  auto getConst(ArgType idx) const { return pmeta_->cstPool.at(idx); }
 
   std::string_view getName(ArgType idx) const { return pmeta_->names.at(idx); }
 
-  auto top() const { return dataStack_.top().get(); }
+  auto top() const { return dataStack_.top(); }
 
   auto popGetTos() {
     auto tos = top()->clone();

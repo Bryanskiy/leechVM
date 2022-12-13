@@ -13,7 +13,7 @@ void StackFrame::push(pLeechObj obj) {
   if (nullptr == obj)
     throw std::invalid_argument("Trying to push nullptr into stackframe");
 
-  dataStack_.push(std::move(obj));
+  dataStack_.push(obj);
 }
 
 State::State(LeechFile *pfile) : pFile(pfile) {
@@ -32,7 +32,14 @@ void Executor::execute() {
 
     state_.nextPC.reset();
 
-    execMap_.at(curInst.getOpcode())(curInst, state_);
+    auto instF = execMap_.find(curInst.getOpcode());
+    if (instF == execMap_.end()) {
+      std::ostringstream ss;
+      ss << "Unsupported opcode "
+         << static_cast<int>(toUnderlying(curInst.getOpcode()));
+      throw std::runtime_error(ss.str());
+    }
+    instF->second(curInst, state_);
 
     state_.pc = state_.nextPC.value_or(state_.pc + 1);
   }
@@ -42,19 +49,19 @@ const std::unordered_map<Opcodes, ExecFunc> Executor::execMap_{
     {Opcodes::LOAD_CONST,
      [](const Instruction &inst, State &state) {
        auto &curFrame = state.getCurFrame();
-       curFrame.push(curFrame.getConst(inst.getArg())->clone());
+       curFrame.push(curFrame.getConst(inst.getArg()));
      }},
     {Opcodes::STORE_FAST,
      [](const Instruction &inst, State &state) {
        auto &curFrame = state.getCurFrame();
        auto name = curFrame.getName(inst.getArg());
-       curFrame.setVar(name, curFrame.top()->clone());
+       curFrame.setVar(name, curFrame.top());
      }},
     {Opcodes::LOAD_FAST,
      [](const Instruction &inst, State &state) {
        auto &curFrame = state.getCurFrame();
        auto name = curFrame.getName(inst.getArg());
-       curFrame.push(curFrame.getVar(name)->clone());
+       curFrame.push(curFrame.getVar(name));
      }},
     {Opcodes::COMPARE_OP,
      [](const Instruction &inst, State &state) {
@@ -63,7 +70,7 @@ const std::unordered_map<Opcodes, ExecFunc> Executor::execMap_{
        auto tos1 = curFrame.popGetTos();
        auto tos2 = curFrame.popGetTos();
 
-       bool res = tos1->compare(tos2.get(), op);
+       bool res = tos2->compare(tos1.get(), op);
 
        curFrame.emplace<IntObj>(static_cast<Integer>(res));
      }},
@@ -103,24 +110,53 @@ const std::unordered_map<Opcodes, ExecFunc> Executor::execMap_{
         Opcodes::PRINT,
         [](const Instruction &, State &state) {
           state.getCurFrame().popGetTos()->print();
+          std::cout << std::endl;
         },
     },
     {Opcodes::CALL_FUNCTION,
      [](const Instruction &inst, State &state) {
+       auto &curFrame = state.getCurFrame();
        auto idx = inst.getArg();
-       auto fName = std::string(state.getCurFrame().getName(idx));
+       auto fName = std::string(curFrame.getName(idx));
 
        auto *fMeta = &state.pFile->meta.funcs.at(fName);
        state.nextPC = fMeta->addr;
+
+       /* Get args from data stack */
+       std::vector<pLeechObj> args(curFrame.stackSize());
+       std::generate(args.begin(), args.end(),
+                     [&curFrame] { return curFrame.popGetTos(); });
+
+       curFrame.setRet(state.pc + 1);
        state.funcStack.emplace(fMeta);
+
+       state.getCurFrame().fillArgs(args.begin(), args.end());
      }},
-    {Opcodes::RETURN_VALUE, [](const Instruction &, State &state) {
+    {Opcodes::RETURN_VALUE,
+     [](const Instruction &, State &state) {
        auto &fstack = state.funcStack;
        auto tos = state.getCurFrame().popGetTos();
 
        fstack.pop();
 
-       if (fstack.size() != 0)
-         state.getCurFrame().push(std::move(tos));
+       if (fstack.size() != 0) {
+         state.nextPC = state.getCurFrame().getRet();
+         state.getCurFrame().push(tos);
+       }
+     }},
+    {Opcodes::BINARY_SUBSCR,
+     [](const Instruction &, State &state) {
+       auto &curFrame = state.getCurFrame();
+       auto idx = curFrame.popGetTos();
+       auto tuple = curFrame.popGetTos();
+
+       curFrame.push(tuple->subscript(idx.get()));
+     }},
+    {Opcodes::BINARY_TRUE_DIVIDE, [](const Instruction &, State &state) {
+       auto &curFrame = state.getCurFrame();
+       auto two = curFrame.popGetTos();
+       auto one = curFrame.popGetTos();
+
+       curFrame.push(one->div(two.get()));
      }}};
 } // namespace leech

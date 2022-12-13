@@ -55,10 +55,34 @@
 .func main
     .cpool
         0: 0
-        1: 20
+        1: 10
+        2: 1
     .names
         0: fib
+        1: N
     .code
+        LOAD_CONST 2
+        STORE_FAST 1
+
+        LOAD_FAST 1
         LOAD_CONST 1
+
+        COMPARE_OP 1
+        POP_JUMP_IF_FALSE :end
+    .label rep
+
+        LOAD_FAST 1
         CALL_FUNCTION 0
+
+        LOAD_FAST 1
+        LOAD_CONST 2
+        BINARY_ADD
+        STORE_FAST 1
+
+        LOAD_FAST 1
+        LOAD_CONST 1
+
+        COMPARE_OP 1
+        POP_JUMP_IF_TRUE :rep
+    .label end
         RETURN_VALUE
