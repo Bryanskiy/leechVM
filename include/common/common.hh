@@ -17,6 +17,15 @@ enum class ValueType : std::uint8_t {
   None
 };
 
+enum class CmpOp : std::uint8_t {
+  LE = 0,
+  LEQ,
+  EQ,
+  NEQ,
+  GR,
+  GREQ,
+};
+
 template <typename T> constexpr auto toUnderlying(T enumVal) {
   return static_cast<std::underlying_type_t<T>>(enumVal);
 }
