@@ -14,24 +14,25 @@
 namespace leech {
 
 struct FuncMeta final : public ISerializable {
-  std::uint64_t addr;
-  std::vector<std::unique_ptr<LeechObj>> cstPool{};
+  FuncAddr addr;
+  std::vector<std::shared_ptr<LeechObj>> cstPool{};
   std::vector<std::string> names;
 
   void serialize(std::ostream &ost) const override;
 };
 
 struct Meta final : public ISerializable {
-  std::unordered_map<std::string, FuncMeta> funcs;
+  std::unordered_map<std::string, FuncMeta> funcs{};
 
   void serialize(std::ostream &ost) const override;
 };
 
 struct LeechFile final : public ISerializable {
-  Meta meta;
-  std::vector<Instruction> code;
+  Meta meta{};
+  std::vector<Instruction> code{};
 
   void serialize(std::ostream &ost) const override;
+  void dump2LeechFormat(std::ostream &ost);
 };
 
 } // namespace leech

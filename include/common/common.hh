@@ -8,14 +8,8 @@
 
 namespace leech {
 
-enum class ValueType : std::uint8_t {
-  Unknown,
-  Integer,
-  Float,
-  String,
-  Tuple,
-  None
-};
+using FuncAddr = std::uint64_t;
+enum class ValueType : std::uint8_t { Unknown, Integer, Float, String, Tuple, None };
 
 enum class CmpOp : std::uint8_t {
   LE = 0,
@@ -96,6 +90,8 @@ public:
   Instruction(std::underlying_type_t<Opcodes> opcode, ArgType arg = 0)
       : Instruction(static_cast<Opcodes>(opcode), arg) {}
 
+  Instruction() = default;
+
   void serialize(std::ostream &ost) const override {
     serializeNum(ost, toUnderlying(opcode_));
     serializeNum(ost, arg_);
@@ -103,6 +99,7 @@ public:
 
   auto getOpcode() const { return opcode_; }
   auto getArg() const { return arg_; }
+  void setArg(ArgType arg) {arg_ = arg;}
 };
 
 } // namespace leech

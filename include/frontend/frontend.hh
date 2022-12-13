@@ -8,6 +8,7 @@
 #include <string>
 
 #include "lLexer.hh"
+#include "leechfile/leechfile.hh"
 
 namespace yy {
 
@@ -19,6 +20,7 @@ public:
   parser::token_type yylex(parser::semantic_type *yylval,
                            parser::location_type *yylloc);
   bool parse();
+  std::shared_ptr<leech::LeechFile> getLeechFile() const { return leechFile_; }
 
   friend parser;
 
@@ -31,6 +33,14 @@ private:
 
 private:
   std::unique_ptr<Lexer> lexer_ = nullptr;
+  std::shared_ptr<leech::LeechFile> leechFile_ =
+      std::make_shared<leech::LeechFile>();
+  std::unordered_map<std::string, leech::FuncAddr> labels_{};
+  std::unordered_map<std::string, leech::FuncAddr> forwardBranches_{};
+  leech::Tuple tupleArgs_{};
+  std::string currentFunc_{};
+  std::size_t instrCount_ = 0;
+  std::size_t globalInstrCount_ = 0;
 };
 
 } // namespace yy

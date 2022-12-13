@@ -2,9 +2,8 @@
 
 namespace yy {
 
-Driver::Driver(std::istream &in, std::ostream &out) {
-  lexer_ = std::make_unique<Lexer>(in, out);
-}
+Driver::Driver(std::istream &in, std::ostream &out)
+    : lexer_{std::make_unique<Lexer>(in, out)} {}
 
 bool Driver::parse() {
   parser parser(this);
