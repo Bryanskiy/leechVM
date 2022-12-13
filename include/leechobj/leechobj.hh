@@ -3,7 +3,9 @@
 
 #include <algorithm>
 #include <concepts>
+#include <istream>
 #include <memory>
+#include <ostream>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -49,6 +51,8 @@ private:
   virtual void serializeVal(std::ostream &) const = 0;
 };
 
+inline pLeechObj deserializeObj(std::istream &ist);
+
 class NoneObj final : public LeechObj {
 public:
   NoneObj() : LeechObj(0, ValueType::None) {}
@@ -69,6 +73,12 @@ public:
       : LeechObj(sizeof(T), typeToValueType<T>()), value_(value) {}
 
   void print() const override { std::cout << value_; }
+
+  static pLeechObj deserialize(std::istream &ist) {
+    deserializeNum<uint64_t>(ist);
+    auto val = deserializeNum<T>(ist);
+    return std::make_unique<NumberObj>(val);
+  }
 
   pLeechObj clone() const override {
     return std::make_unique<NumberObj>(value_);
@@ -131,6 +141,12 @@ public:
     return std::make_unique<StringObj>(string_);
   }
 
+  static pLeechObj deserialize(std::istream &ist) {
+    auto strlen = deserializeNum<uint64_t>(ist);
+    auto str = deserializeString(ist, strlen);
+    return std::make_unique<StringObj>(str);
+  }
+
 private:
   void serializeVal(std::ostream &ost) const override {
     for (auto sym : string_)
@@ -174,12 +190,39 @@ public:
     return std::make_unique<TupleObj>(std::move(res));
   }
 
+  static pLeechObj deserialize(std::istream &ist) {
+    auto len = deserializeNum<uint64_t>(ist);
+    Tuple tuple{};
+    for (uint64_t i = 0; i < len; ++i)
+      tuple.push_back(deserializeObj(ist));
+
+    return std::make_unique<TupleObj>(std::move(tuple));
+  }
+
 private:
   void serializeVal(std::ostream &ost) const override {
     for (auto &&ptr : tuple_)
       ptr->serialize(ost);
   }
 };
+
+inline pLeechObj deserializeObj(std::istream &ist) {
+  auto cstTyVal = deserializeNum<std::underlying_type_t<ValueType>>(ist);
+  auto cstTy = static_cast<ValueType>(cstTyVal);
+
+  switch (cstTy) {
+  case ValueType::Integer:
+    return IntObj::deserialize(ist);
+  case ValueType::Float:
+    return FloatObj::deserialize(ist);
+  case ValueType::String:
+    return StringObj::deserialize(ist);
+  case ValueType::Tuple:
+    return TupleObj::deserialize(ist);
+  default:
+    return nullptr;
+  }
+}
 
 } // namespace leech
 

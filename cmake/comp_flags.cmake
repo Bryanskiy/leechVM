@@ -43,7 +43,7 @@ set(GCC_WARNINGS
 -Wconversion
 -Wctor-dtor-privacy
 -Wempty-body
--Wfloat-equal
+# -Wfloat-equal
 -Wformat-nonliteral
 -Wformat-security
 -Wformat-signedness
@@ -69,7 +69,7 @@ set(GCC_WARNINGS
 -Wsuggest-final-types
 -Wsuggest-override
 -Wswitch-default
--Wswitch-enum
+# -Wswitch-enum
 -Wsync-nand
 -Wundef
 -Wunreachable-code
