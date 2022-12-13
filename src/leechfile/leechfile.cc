@@ -73,10 +73,11 @@ void LeechFile::dump2LeechFormat(std::ostream &ost) {
       ost << dataOffset << i << ": " << fmeta.names[i] << std::endl;
     }
   }
-  ost << blockOffset << ".code" << std::endl;
-  for (auto &&instr : code) {
-    ost << dataOffset << OpcodeConv::toName(instr.getOpcode()).value() << " "
-        << static_cast<int>(instr.getArg()) << std::endl;
+  ost << ".code" << std::endl;
+  for (std::size_t i = 0; i < code.size(); ++i) {
+    ost << blockOffset << i << " "
+        << OpcodeConv::toName(code[i].getOpcode()).value() << " "
+        << static_cast<int>(code[i].getArg()) << std::endl;
   }
 }
 
